@@ -62,9 +62,9 @@ export class Roads {
 
     // Lane markings are instanced so the detailed road network stays light.
     const dashGeometry = new THREE.BoxGeometry(0.14, 0.025, 3.2);
-    const dashes = new THREE.InstancedMesh(dashGeometry, white, 300);
+    const dashes = new THREE.InstancedMesh(dashGeometry, white, 400);
     const yellowGeometry = new THREE.BoxGeometry(0.13, 0.028, 5.5);
-    const centerLines = new THREE.InstancedMesh(yellowGeometry, yellow, 180);
+    const centerLines = new THREE.InstancedMesh(yellowGeometry, yellow, 400);
     const dummy = new THREE.Object3D();
     let dashCount = 0, yellowCount = 0;
 
