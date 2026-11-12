@@ -14,6 +14,7 @@ const slowLoadTimer = window.setTimeout(() => {
 
 function showFailure(title, detail) {
   if (!boot) return;
+  boot.dataset.gameStarted = 'true';
   boot.style.opacity = '1';
   boot.innerHTML = '';
   const mark = document.createElement('div');
