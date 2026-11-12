@@ -43,7 +43,8 @@ export class CityBlock {
           const px = -width / 2 + (column + 0.5) * width / columns;
           for (const side of [-1, 1]) {
             dummy.position.set(px, y, side * (depth / 2 + 0.035));
-            dummy.rotation.set(0, 0, 0);
+            dummy.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), rotation).add(new THREE.Vector3(x, 0, z));
+            dummy.rotation.set(0, rotation, 0);
             dummy.scale.set(1, 1, 1);
             dummy.updateMatrix();
             windowInstances.setMatrixAt(windowCount++, dummy.matrix);
@@ -53,7 +54,8 @@ export class CityBlock {
             const pz = -depth / 2 + (s + 0.5) * depth / sideColumns;
             for (const side of [-1, 1]) {
               dummy.position.set(side * (width / 2 + 0.035), y, pz);
-              dummy.rotation.set(0, Math.PI / 2, 0);
+              dummy.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), rotation).add(new THREE.Vector3(x, 0, z));
+              dummy.rotation.set(0, rotation + Math.PI / 2, 0);
               dummy.updateMatrix();
               windowInstances.setMatrixAt(windowCount++, dummy.matrix);
             }
