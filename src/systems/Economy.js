@@ -10,7 +10,15 @@ export class Economy {
     this.xp = 0;
     this.buildingCount = 0;
   }
-  reset() {\n    this.cash = CITY_CONFIG.startingCash;\n    this.income = 0;\n    this.population = 0;\n    this.level = 1;\n    this.xp = 0;\n    this.buildingCount = 0;\n  }\n  canAfford(amount) { return this.cash >= amount; }
+  reset() {
+    this.cash = CITY_CONFIG.startingCash;
+    this.income = 0;
+    this.population = 0;
+    this.level = 1;
+    this.xp = 0;
+    this.buildingCount = 0;
+  }
+  canAfford(amount) { return this.cash >= amount; }
   spend(amount) {
     if (!this.canAfford(amount)) return false;
     this.cash -= amount;
