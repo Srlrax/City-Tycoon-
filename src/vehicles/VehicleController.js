@@ -62,6 +62,10 @@ export class VehicleController {
     const directionFactor = this.speed >= 0 ? 1 : -1;
     this.vehicle.group.rotation.y += this.steering * directionFactor * Math.min(Math.abs(this.speed) / 10, 1) * dt * 1.7;
 
+    if (!input.dragging) {
+      let yawDelta = (this.vehicle.group.rotation.y - input.yaw + Math.PI * 3) % (Math.PI * 2) - Math.PI;
+      input.yaw += yawDelta * Math.min(1, dt * 4.5);
+    }
     const forward = new THREE.Vector3(Math.sin(this.vehicle.group.rotation.y), 0, Math.cos(this.vehicle.group.rotation.y));
     this.vehicle.group.position.addScaledVector(forward, this.speed * dt);
     this.vehicle.group.position.x = THREE.MathUtils.clamp(this.vehicle.group.position.x, -98, 98);
