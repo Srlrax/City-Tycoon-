@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import THREE from '../vendor/three.js';
 export class PedestrianSystem {
   constructor(scene){
     this.people=[];const colors=[0x315d7b,0x9a674e,0x687f59,0x6e668b,0xa6a7a1,0x8c4e4b];
