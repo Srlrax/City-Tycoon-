@@ -1,17 +1,18 @@
 import THREE from '../vendor/three.js';
 
 export function createLighting(scene) {
-  const sky = new THREE.Color(0x94bdcf);
+  const sky = new THREE.Color(0x9bc9df);
   scene.background = sky;
-  scene.fog = new THREE.Fog(0xa7c4cb, 115, 275);
+  scene.fog = new THREE.Fog(0xb4cbd0, 145, 330);
 
-  const hemi = new THREE.HemisphereLight(0xdff3ff, 0x455b45, 1.55);
+  const hemi = new THREE.HemisphereLight(0xe8f6ff, 0x53664b, 1.38);
   scene.add(hemi);
 
-  const sun = new THREE.DirectionalLight(0xffedcf, 2.25);
-  sun.position.set(-72, 105, 54);
+  const sun = new THREE.DirectionalLight(0xffe5c2, 2.55);
+  sun.position.set(-82, 125, 68);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.radius = 4;
   sun.shadow.camera.left = -145;
   sun.shadow.camera.right = 145;
   sun.shadow.camera.top = 145;
@@ -22,7 +23,7 @@ export function createLighting(scene) {
   sun.shadow.normalBias = 0.025;
   scene.add(sun);
 
-  const coolFill = new THREE.DirectionalLight(0x9dcfff, 0.48);
+  const coolFill = new THREE.DirectionalLight(0xaedcff, 0.58);
   coolFill.position.set(65, 38, -72);
   scene.add(coolFill);
 
