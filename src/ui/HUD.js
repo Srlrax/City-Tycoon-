@@ -25,6 +25,7 @@ export class HUD {
         <div class="detail-row"><span>Next unlock</span><b id="hud-unlock">Office</b></div>
         <button class="primary-button ui-button" id="upgrade-button">UPGRADE CITY · $1,250</button>
         <button class="secondary-button ui-button" id="save-button">SAVE CITY</button>
+        <button class="danger-button ui-button" id="reset-city-button">RESET EVERYTHING</button>
       </aside>
       <div class="controls-hint"><span class="keycap">W A S D</span> MOVE <span class="keycap">RIGHT DRAG</span> LOOK <span class="keycap">SCROLL</span> ZOOM <span class="keycap">E</span> DRIVE CAR <span class="keycap">CLICK</span> BUILD</div>
       <div id="toast" class="toast" role="status"></div>
@@ -33,7 +34,18 @@ export class HUD {
         <h2>Welcome, Mayor.</h2><p>Your city starts small. Build homes and businesses, collect income, and upgrade your city to unlock bigger developments.</p>
         <ul><li><b>WASD / arrow keys:</b> move your character. Hold Shift to run and press Space to jump.</li><li><b>Right mouse drag:</b> look around. Use the mouse wheel to zoom in and out.</li><li><b>E:</b> enter or exit your blue sports car when you are nearby.</li><li><b>While driving:</b> WASD steers and accelerates or reverses.</li><li><b>Build menu:</b> select a property, then click an empty green lot.</li><li><b>Upgrade city:</b> unlocks offices, parks, and the glass tower.</li><li><b>Save city:</b> stores your progress in this browser.</li></ul>
         <button class="primary-button ui-button" id="got-it">LET'S BUILD</button>
-      </div></div>`;
+      </div></div>
+      <div id="reset-confirm-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="reset-confirm-title">
+        <div class="modal-card reset-confirm-card">
+          <div class="panel-icon reset-warning-icon">!</div>
+          <h2 id="reset-confirm-title">Are you sure?</h2>
+          <p>This will erase your entire city: all buildings, cash, income, population, upgrades, and saved progress. Your game will restart from the beginning.</p>
+          <div class="confirm-actions">
+            <button class="danger-button ui-button" id="confirm-reset-yes">YES</button>
+            <button class="secondary-button ui-button" id="confirm-reset-no">NO</button>
+          </div>
+        </div>
+      </div>`;
     this.toast = new Notifications(this.root.querySelector('#toast'));
     this.list = this.root.querySelector('#building-list');
     this.buildMenu = new BuildMenu(this.list, item => {
@@ -46,6 +58,12 @@ export class HUD {
     this.root.querySelector('#got-it').addEventListener('click', () => this.closeHelp());
     this.root.querySelector('#upgrade-button').addEventListener('click', () => this.handlers.onUpgrade());
     this.root.querySelector('#save-button').addEventListener('click', () => this.handlers.onSave());
+    this.root.querySelector('#reset-city-button').addEventListener('click', () => this.openResetConfirm());
+    this.root.querySelector('#confirm-reset-yes').addEventListener('click', () => {
+      this.closeResetConfirm();
+      this.handlers.onReset();
+    });
+    this.root.querySelector('#confirm-reset-no').addEventListener('click', () => this.closeResetConfirm());
     this.renderBuildings(1);
   }
   renderBuildings(level) {
@@ -67,4 +85,6 @@ export class HUD {
   }
   openHelp() { this.root.querySelector('#help-modal').classList.remove('hidden'); }
   closeHelp() { this.root.querySelector('#help-modal').classList.add('hidden'); }
+  openResetConfirm() { this.root.querySelector('#reset-confirm-modal').classList.remove('hidden'); }
+  closeResetConfirm() { this.root.querySelector('#reset-confirm-modal').classList.add('hidden'); }
 }
