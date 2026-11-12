@@ -55,7 +55,8 @@ export class Game {
     this.hud = new HUD(uiElement, {
       onSelect: id => this.placement.select(id),
       onUpgrade: () => this.upgradeCity(),
-      onSave: () => this.saveGame()
+      onSave: () => this.saveGame(),
+      onReset: () => this.resetEverything()
     });
     this.vehicles = new VehicleController(this.scene, this.player, message => this.hud.toast.show(message));
 
@@ -117,6 +118,34 @@ export class Game {
     this.hud.toast.show('City level ' + this.economy.level + ' unlocked. New developments available!');
     this.refreshHUD();
     this.saveGame(true);
+  }
+
+  resetEverything() {
+    // Clear placed properties and restore all progression to a brand-new city.
+    this.placement.clear();
+    this.economy.reset();
+    this.player.reset();
+    this.vehicles.reset();
+
+    // Restore the default third-person camera and character controls.
+    this.input.keys.clear();
+    this.input.pressed.clear();
+    this.input.dragging = false;
+    this.input.yaw = 0;
+    this.input.pitch = 0.28;
+    this.input.zoom = 12.5;
+    this.input.zoomDelta = 0;
+    this.cameraRig.distance = 12.5;
+    this.cameraRig.snapTo(this.player.group.position);
+
+    // Reset the selected building, timers, HUD, and the persistent save.
+    this.placement.select('house');
+    this.hud.selected = 'house';
+    this.incomeElapsed = 0;
+    this.autosaveElapsed = 0;
+    this.refreshHUD();
+    this.saveGame(true);
+    this.hud.toast.show('Your city has been completely reset.');
   }
 
   refreshHUD() {
