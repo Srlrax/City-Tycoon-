@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import THREE from '../vendor/three.js';
 const paint=color=>new THREE.MeshStandardMaterial({color,roughness:.42,metalness:.12});
 function box(parent,x,y,z,sx,sy,sz,mat){const mesh=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat);mesh.position.set(x,y,z);mesh.castShadow=true;parent.add(mesh);return mesh;}
 export class TrafficSystem {
