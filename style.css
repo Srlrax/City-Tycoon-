@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap');
 :root{font-family:'DM Sans',Arial,sans-serif;color:#f5f8fb;background:#111b25;font-synthesis:none;text-rendering:optimizeLegibility}
 *{box-sizing:border-box}html,body,#game-shell{margin:0;width:100%;height:100%;overflow:hidden}body{background:#9db8c5}button{font:inherit}#game-shell{position:relative;isolation:isolate}#world{position:absolute;inset:0}#world canvas{display:block;width:100%;height:100%;outline:none}
 #ui{position:absolute;inset:0;pointer-events:none;z-index:2}.ui-panel,.ui-button,.toast,.modal{pointer-events:auto}
