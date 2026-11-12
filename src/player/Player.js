@@ -110,6 +110,19 @@ export class Player {
     this.jumping = false;
   }
 
+  reset() {
+    this.group.position.set(0, 0, 13);
+    this.group.rotation.set(0, 0, 0);
+    this.group.visible = true;
+    this.velocityY = 0;
+    this.jumpTime = 0;
+    this.moving = false;
+    this.sprinting = false;
+    this.jumping = false;
+    this.animator.phase = 0;
+    this.animator.blend = 0;
+  }
+
   update(dt, input, speed = 9) {
     const forward = new THREE.Vector3(-Math.sin(input.yaw), 0, -Math.cos(input.yaw));
     const right = new THREE.Vector3(Math.cos(input.yaw), 0, -Math.sin(input.yaw));
