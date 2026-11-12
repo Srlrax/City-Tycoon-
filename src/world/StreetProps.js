@@ -26,12 +26,12 @@ export class StreetProps {
     // Trees have varied crowns and small ground planters.
     for (const road of [-66, -22, 22, 66]) {
       for (let along = -92; along <= 92; along += 23) {
-        // Keep the entire central building grid clear; trees belong on the outer avenues.
-        if (Math.abs(along) < 70) continue;
+        // Keep trees on the roadside verge, but never let them block a crossing street.
+        if ([-66, -22, 22, 66].some(crossing => Math.abs(along - crossing) < 9)) continue;
         for (const side of [-1, 1]) {
           const x = along;
-          const z = road + side * 8.25;
-          addBox(this.parent, x, 0.12, z, 3.1, 0.18, 3.1, sidewalkGreen, false);
+          const z = road + side * 8.9;
+          addBox(this.parent, x, 0.12, z, 2.2, 0.16, 2.2, sidewalkGreen, false);
           addCylinder(this.parent, x, 1.15, z, 0.19, 0.28, 2.1, trunk, 9);
           const crown = new THREE.Mesh(new THREE.IcosahedronGeometry(1.22 + (Math.abs(along) % 3) * 0.1, 1), leafMats[Math.abs(along / 23) % 3 | 0]);
           crown.position.set(x, 2.75, z); crown.scale.set(1, 1.05, 1); crown.castShadow = true; this.parent.add(crown);
