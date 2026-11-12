@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import THREE from '../vendor/three.js';
 import { CITY_CONFIG } from '../config.js';
 import { createLighting } from '../world/Lighting.js';
 import { CityWorld } from '../world/CityWorld.js';
