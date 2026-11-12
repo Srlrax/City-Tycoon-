@@ -73,6 +73,18 @@ export class VehicleController {
     this.vehicle.update(dt, this.speed, this.steering);
   }
 
+  reset() {
+    this.driving = false;
+    this.speed = 0;
+    this.steering = 0;
+    this.player.group.visible = true;
+    this.player.group.position.set(0, 0, 13);
+    this.player.group.rotation.set(0, 0, 0);
+    this.vehicle.group.position.set(-5, 0, 20.5);
+    this.vehicle.group.rotation.set(0, Math.PI / 2, 0);
+    this.vehicle.update(0, 0, 0);
+  }
+
   get focus() {
     return this.driving ? this.vehicle.group.position : this.player.group.position;
   }
