@@ -38,7 +38,7 @@ export class Economy {
   }
   load(data) {
     if (!data || typeof data !== 'object') return;
-    this.cash = Math.max(0, Number(data.cash) || CITY_CONFIG.startingCash);
+    const savedCash = Number(data.cash);\n    this.cash = Number.isFinite(savedCash) && savedCash >= 0 ? savedCash : CITY_CONFIG.startingCash;
     this.level = Math.min(4, Math.max(1, Number(data.level) || 1));
     this.xp = Math.max(0, Number(data.xp) || 0);
   }
