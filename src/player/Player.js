@@ -61,8 +61,8 @@ export class Player {
 
     const leftLeg = new THREE.Group();
     const rightLeg = new THREE.Group();
-    leftLeg.position.set(-0.19, -0.42, 0);
-    rightLeg.position.set(0.19, -0.42, 0);
+    leftLeg.position.set(-0.19, 0.95, 0);
+    rightLeg.position.set(0.19, 0.95, 0);
     this.group.add(leftLeg, rightLeg);
     for (const leg of [leftLeg, rightLeg]) {
       box(leg, 0, -0.23, 0, 0.24, 0.48, 0.28, pants);
