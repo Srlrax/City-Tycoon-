@@ -26,12 +26,12 @@ export class HUD {
         <button class="primary-button ui-button" id="upgrade-button">UPGRADE CITY · $1,250</button>
         <button class="secondary-button ui-button" id="save-button">SAVE CITY</button>
       </aside>
-      <div class="controls-hint"><span class="keycap">W A S D</span> MOVE <span class="keycap">RIGHT DRAG</span> ROTATE CAMERA <span class="keycap">CLICK</span> PLACE BUILDING</div>
+      <div class="controls-hint"><span class="keycap">W A S D</span> MOVE <span class="keycap">RIGHT DRAG</span> LOOK <span class="keycap">SCROLL</span> ZOOM <span class="keycap">E</span> DRIVE CAR <span class="keycap">CLICK</span> BUILD</div>
       <div id="toast" class="toast" role="status"></div>
       <div id="help-modal" class="modal hidden"><div class="modal-card">
         <button class="modal-close ui-button" id="close-help" aria-label="Close">×</button>
         <h2>Welcome, Mayor.</h2><p>Your city starts small. Build homes and businesses, collect income, and upgrade your city to unlock bigger developments.</p>
-        <ul><li><b>WASD / arrow keys:</b> move your character.</li><li><b>Right mouse drag:</b> rotate the camera.</li><li><b>Build menu:</b> select a property, then click an empty green lot.</li><li><b>Upgrade city:</b> unlocks offices, parks, and the glass tower.</li><li><b>Save city:</b> stores your progress in this browser.</li></ul>
+        <ul><li><b>WASD / arrow keys:</b> move your character. Hold Shift to run and press Space to jump.</li><li><b>Right mouse drag:</b> look around. Use the mouse wheel to zoom in and out.</li><li><b>E:</b> enter or exit your blue sports car when you are nearby.</li><li><b>While driving:</b> WASD steers and accelerates or reverses.</li><li><b>Build menu:</b> select a property, then click an empty green lot.</li><li><b>Upgrade city:</b> unlocks offices, parks, and the glass tower.</li><li><b>Save city:</b> stores your progress in this browser.</li></ul>
         <button class="primary-button ui-button" id="got-it">LET'S BUILD</button>
       </div></div>`;
     this.toast = new Notifications(this.root.querySelector('#toast'));
