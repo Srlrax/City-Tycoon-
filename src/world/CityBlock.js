@@ -19,7 +19,7 @@ export class CityBlock {
       metalness: 0.32
     });
     const windowGeometry = new THREE.BoxGeometry(1.05, 0.95, 0.055);
-    const windowInstances = new THREE.InstancedMesh(windowGeometry, windowMaterial, 1800);
+    const windowInstances = new THREE.InstancedMesh(windowGeometry, windowMaterial, 14000);
     windowInstances.instanceMatrix.setUsage(THREE.StaticDrawUsage);
     const dummy = new THREE.Object3D();
     let windowCount = 0;
