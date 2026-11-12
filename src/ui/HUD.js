@@ -25,8 +25,8 @@ export class HUD {
         <div class="detail-row"><span>Next unlock</span><b id="hud-unlock">Office</b></div>
         <button class="primary-button ui-button" id="upgrade-button">UPGRADE CITY · $1,250</button>
         <button class="secondary-button ui-button" id="save-button">SAVE CITY</button>
-        <button class="danger-button ui-button" id="reset-city-button">RESET EVERYTHING</button>
       </aside>
+      <button class="danger-button ui-button reset-fab" id="reset-city-button">↻ RESET EVERYTHING</button>
       <div class="controls-hint"><span class="keycap">W A S D</span> MOVE <span class="keycap">RIGHT DRAG</span> LOOK <span class="keycap">SCROLL</span> ZOOM <span class="keycap">E</span> DRIVE CAR <span class="keycap">CLICK</span> BUILD</div>
       <div id="toast" class="toast" role="status"></div>
       <div id="help-modal" class="modal hidden"><div class="modal-card">
