@@ -1,4 +1,4 @@
-import { BUILDINGS } from '../city/BuildingCatalog.js';
+import { BuildMenu } from './BuildMenu.js';
 import { Notifications } from './Notifications.js';
 const money = value => '$' + Math.floor(value).toLocaleString('en-US');
 
@@ -36,6 +36,11 @@ export class HUD {
       </div></div>`;
     this.toast = new Notifications(this.root.querySelector('#toast'));
     this.list = this.root.querySelector('#building-list');
+    this.buildMenu = new BuildMenu(this.list, item => {
+      this.selected = item.id;
+      this.handlers.onSelect(item.id);
+      this.toast.show('Selected ' + item.name + '. Click an empty green lot.');
+    });
     this.root.querySelector('#help-button').addEventListener('click', () => this.openHelp());
     this.root.querySelector('#close-help').addEventListener('click', () => this.closeHelp());
     this.root.querySelector('#got-it').addEventListener('click', () => this.closeHelp());
@@ -44,20 +49,9 @@ export class HUD {
     this.renderBuildings(1);
   }
   renderBuildings(level) {
-    this.list.innerHTML = '';
-    for (const item of BUILDINGS) {
-      const locked = level < item.unlock;
-      const button = document.createElement('button');
-      button.className = 'build-card' + (this.selected === item.id ? ' active' : '');
-      button.disabled = locked;
-      button.innerHTML = `<span class="building-emoji">${item.emoji}</span><span class="building-copy"><span class="building-name">${item.name}${locked ? ' 🔒' : ''}</span><span class="building-detail">+${money(item.income)}/s · ${item.population} residents</span></span><span class="building-price">${money(item.cost)}</span>`;
-      button.addEventListener('click', () => {
-        this.selected = item.id; this.renderBuildings(level); this.handlers.onSelect(item.id);
-        this.toast.show('Selected ' + item.name + '. Click an empty green lot.');
-      });
-      this.list.appendChild(button);
-    }
+    this.buildMenu.render(level, this.selected);
   }
+
   update(economy, buildingCount) {
     this.root.querySelector('#hud-cash').textContent = money(economy.cash);
     this.root.querySelector('#hud-income').textContent = money(economy.income) + '/s';
