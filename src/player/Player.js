@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import THREE from '../vendor/three.js';
 
 function box(parent, x, y, z, sx, sy, sz, material) {
   const mesh = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), material);
