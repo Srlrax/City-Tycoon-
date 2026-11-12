@@ -1,25 +1,5 @@
 import THREE from '../vendor/three.js';
-
-function makeSurfaceTexture(base, variation, repeatX, repeatY) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 256; canvas.height = 256;
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = base; ctx.fillRect(0, 0, 256, 256);
-  const image = ctx.getImageData(0, 0, 256, 256);
-  for (let i = 0; i < image.data.length; i += 4) {
-    const n = (Math.random() - 0.5) * variation;
-    image.data[i] = Math.max(0, Math.min(255, image.data[i] + n));
-    image.data[i + 1] = Math.max(0, Math.min(255, image.data[i + 1] + n));
-    image.data[i + 2] = Math.max(0, Math.min(255, image.data[i + 2] + n));
-  }
-  ctx.putImageData(image, 0, 0);
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(repeatX, repeatY);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.anisotropy = 4;
-  return texture;
-}
+import { createNoiseTexture } from '../core/AssetLoader.js';
 
 function addBox(parent, x, y, z, sx, sy, sz, material, cast = false) {
   const mesh = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), material);
@@ -36,13 +16,13 @@ export class Roads {
   build() {
     const asphalt = new THREE.MeshStandardMaterial({
       color: 0xffffff,
-      map: makeSurfaceTexture('#454b4d', 17, 4, 36),
+      map: createNoiseTexture('#454b4d', 17, 4, 36),
       roughness: 0.98,
       metalness: 0.02
     });
     const sidewalkMat = new THREE.MeshStandardMaterial({
       color: 0xffffff,
-      map: makeSurfaceTexture('#bfc0b7', 12, 5, 28),
+      map: createNoiseTexture('#bfc0b7', 12, 5, 28),
       roughness: 0.94
     });
     const curb = new THREE.MeshStandardMaterial({ color: 0x9b9e98, roughness: 0.9 });
