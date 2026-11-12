@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import THREE from '../vendor/three.js';
 
 const material = (color, roughness = 0.86) => new THREE.MeshStandardMaterial({ color, roughness });
 function addBox(parent, x, y, z, sx, sy, sz, mat, cast = true, receive = true) {
