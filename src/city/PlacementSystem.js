@@ -73,6 +73,27 @@ export class PlacementSystem {
     }
     return group;
   }
+  clear() {
+    for (const item of this.objects) {
+      this.scene.remove(item.group);
+      const geometries = new Set();
+      const materials = new Set();
+      item.group.traverse(object => {
+        if (!object.isMesh) return;
+        if (object.geometry) geometries.add(object.geometry);
+        for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+          if (material) materials.add(material);
+        }
+      });
+      for (const geometry of geometries) geometry.dispose();
+      for (const material of materials) material.dispose();
+    }
+    this.objects = [];
+    this.occupied.clear();
+    this.selected = 'house';
+    this.setBuildingMode(true);
+  }
+
   getSaveData(){return this.objects.map(item=>({type:item.type,gx:item.gx,gz:item.gz}));}
   dispose(){this.renderer.domElement.removeEventListener('click',this.onClick);}
 }
