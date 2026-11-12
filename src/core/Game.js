@@ -17,10 +17,13 @@ export class Game {
     this.worldElement=worldElement;this.uiElement=uiElement;this.scene=new THREE.Scene();
     this.camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,420);
     this.renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
-    const lowPower = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || (navigator.deviceMemory && navigator.deviceMemory <= 4);\n    this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, lowPower ? 1.25 : 1.6));this.renderer.setSize(innerWidth,innerHeight);
+    const lowPower = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || (navigator.deviceMemory && navigator.deviceMemory <= 4);
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, lowPower ? 1.25 : 1.6));this.renderer.setSize(innerWidth,innerHeight);
     this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;
     this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.05;
-    worldElement.appendChild(this.renderer.domElement);\n    const lighting = createLighting(this.scene);\n    if (lowPower) lighting.sun.shadow.mapSize.set(1024, 1024);
+    worldElement.appendChild(this.renderer.domElement);
+    const lighting = createLighting(this.scene);
+    if (lowPower) lighting.sun.shadow.mapSize.set(1024, 1024);
 
     this.city=new CityWorld(this.scene);const {tiles}=this.city.build();
     this.player=new Player(this.scene);this.input=new Input(this.renderer.domElement);
