@@ -26,7 +26,8 @@ export class StreetProps {
     // Trees have varied crowns and small ground planters.
     for (const road of [-66, -22, 22, 66]) {
       for (let along = -92; along <= 92; along += 23) {
-        if (Math.abs(along) < 15) continue;
+        // Keep the entire central building grid clear; trees belong on the outer avenues.
+        if (Math.abs(along) < 70) continue;
         for (const side of [-1, 1]) {
           const x = along;
           const z = road + side * 8.25;
