@@ -65,5 +65,67 @@ export class StreetProps{
     rock.position.set(x+(i-1)*.72,.34,z+(i%2)*.32);rock.scale.set(1.25,.72,.9);rock.rotation.y=i*.8;rock.castShadow=true;this.parent.add(rock);
    }
   }
+  // Continuous planted verges between street trees make sidewalks feel
+  // maintained and lived-in, while keeping the walking surface clear.
+  const vergeShrubs=[mat(0x2f6e43),mat(0x427f4c),mat(0x568c51)];
+  const bloomColors=[mat(0xf0d58b),mat(0xd98982),mat(0xe8e5cf),mat(0xb9a6d7)];
+  for(const road of [-66,-22,22,66])for(const side of [-1,1]){
+   for(let along=-88;along<=88;along+=22){
+    const x=along+11,z=road+side*9.15;
+    for(let n=0;n<3;n++){
+     const bush=new THREE.Mesh(new THREE.SphereGeometry(.43+(n%2)*.08,9,7),vergeShrubs[(n+Math.abs(along/22))%vergeShrubs.length]);
+     bush.position.set(x-.8+n*.8,.43,z+(n%2?-.34:.34));bush.scale.y=.76;bush.castShadow=true;this.parent.add(bush);
+    }
+    for(let n=0;n<4;n++){
+     cylinder(this.parent,x-1.05+n*.7,.27,z+side*.9,.025,.025,.42,vergeShrubs[0],5);
+     const bloom=new THREE.Mesh(new THREE.SphereGeometry(.12,7,6),bloomColors[(n+Math.abs(along/22))%bloomColors.length]);
+     bloom.position.set(x-1.05+n*.7,.51,z+side*.9);this.parent.add(bloom);
+    }
+   }
+  }
+
+  // Bike racks, fire hydrants and picnic tables add recognizable human-scale
+  // details away from intersections and traffic lanes.
+  const red=mat(0xb64e3d,.72), concrete=mat(0x9b9b91,.94), picnicWood=mat(0x98724d);
+  for(const [x,z,rot] of [[-48,-13,0],[48,13,Math.PI],[-13,48,Math.PI/2],[13,-48,-Math.PI/2]]){
+   const rack=new THREE.Group();rack.position.set(x,0,z);rack.rotation.y=rot;this.parent.add(rack);
+   for(const offset of [-.58,.58]){
+    const hoop=new THREE.Mesh(new THREE.TorusGeometry(.34,.055,7,16,Math.PI),steel);
+    hoop.rotation.z=Math.PI;hoop.position.set(offset,.56,0);rack.add(hoop);
+    cylinder(rack,offset,.23,0,.055,.055,.46,steel,8);
+   }
+  }
+  for(const [x,z] of [[-59,-74],[59,-74],[-59,74],[59,74],[-74,-15],[74,15],[-15,-74],[15,74]]){
+   cylinder(this.parent,x,.48,z,.19,.16,.92,red,9);
+   cylinder(this.parent,x,.94,z,.13,.13,.12,red,9);
+   box(this.parent,x,.67,z,.42,.12,.3,red,false);
+   box(this.parent,x,.99,z,.24,.08,.24,concrete,false);
+  }
+  for(const [x,z,rot] of [[-91,-42,0],[91,42,Math.PI],[-42,91,Math.PI/2],[42,-91,-Math.PI/2]]){
+   const table=new THREE.Group();table.position.set(x,0,z);table.rotation.y=rot;this.parent.add(table);
+   box(table,0,.86,0,2.5,.16,1.05,picnicWood);
+   for(const side of [-1,1]){
+    box(table,0,.55,side*.78,2.35,.13,.32,picnicWood);
+    for(const end of [-.88,.88])box(table,end,.42,side*.78,.12,.8,.12,steel);
+   }
+   for(const end of [-.9,.9])box(table,end,.42,0,.12,.8,.12,steel);
+  }
+
+  // Stone-edged planting islands break up the open corners between blocks.
+  const islandSoil=mat(0x554b3c,1), islandEdge=mat(0x8c958b,.95);
+  for(const [x,z] of [[-91,-13],[91,13],[-13,91],[13,-91],[-91,13],[91,-13],[13,91],[-13,-91]]){
+   const island=new THREE.Group();island.position.set(x,0,z);this.parent.add(island);
+   box(island,0,.14,0,5.2,.24,2.4,islandEdge,false);
+   box(island,0,.28,0,4.82,.1,2.02,islandSoil,false);
+   for(let n=0;n<5;n++){
+    const shrub=new THREE.Mesh(new THREE.SphereGeometry(.42+(n%2)*.1,9,7),vergeShrubs[n%vergeShrubs.length]);
+    shrub.position.set(-1.7+n*.85,.67,(n%2?-.24:.24));shrub.scale.y=.8;shrub.castShadow=true;island.add(shrub);
+    if(n===1||n===3){
+     const flower=new THREE.Mesh(new THREE.SphereGeometry(.14,7,6),bloomColors[(n+1)%bloomColors.length]);
+     flower.position.set(shrub.position.x,.93,shrub.position.z);island.add(flower);
+    }
+   }
+  }
+
  }
 }
