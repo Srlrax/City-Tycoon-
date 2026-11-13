@@ -62,7 +62,7 @@ export class StreetProps{
 
   // Layered neighborhood landscaping: raised flower beds, clipped shrubs and ornamental stones.
   const soil=mat(0x51483d,1), shrubMats=[mat(0x285f3c),mat(0x397b48),mat(0x4c8b50)], flowerMats=[mat(0xe7c77b),mat(0xd98f86),mat(0xe8e2c5)];
-  const gardenSpots=[[-94,-94],[-94,94],[94,-94],[94,94],[-112,-34],[112,34],[-34,112],[34,-112]];
+  const gardenSpots=[[-112,-34],[112,34],[-34,112],[34,-112]];
   for(let i=0;i<gardenSpots.length;i++){
    const [x,z]=gardenSpots[i], bed=new THREE.Group();bed.position.set(x,0,z);this.parent.add(bed);
    box(bed,0,.16,0,8.2,.28,2.25,planter,false);
