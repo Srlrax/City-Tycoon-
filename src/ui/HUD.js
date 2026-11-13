@@ -80,7 +80,12 @@ export class HUD {
   updateMission(state) {
     const card = this.root.querySelector('#mission-card');
     if (!state || !state.mission) {
-      card.innerHTML = '<div class="mission-kicker">CITY LEGEND</div><div class="mission-title">All objectives complete!</div><div class="mission-detail">Your city is ready for its next chapter.</div>';
+      card.querySelector('#mission-count').textContent = 'COMPLETE';
+      card.querySelector('#mission-title').textContent = 'All objectives complete!';
+      card.querySelector('#mission-detail').textContent = 'Your city is ready for its next chapter.';
+      card.querySelector('#mission-fill').style.width = '100%';
+      card.querySelector('#mission-progress').textContent = '6 / 6';
+      card.querySelector('#mission-reward').textContent = 'CITY LEGEND';
       return;
     }
     const m = state.mission;
