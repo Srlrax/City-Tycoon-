@@ -132,10 +132,10 @@ export class PlacementSystem {
     if(isHouse){
       // Twin sloped roof planes create a recognizable gable instead of a pyramid cap.
       const roofPanelA=addBox(group,-w*.245,height+1.18,0,w*.58,.2,d+1.0,roof);
-      roofPanelA.rotation.z=-0.52;
+      roofPanelA.rotation.z=0.52;
       const roofPanelB=addBox(group,w*.245,height+1.18,0,w*.58,.2,d+1.0,roof);
-      roofPanelB.rotation.z=0.52;
-      addBox(group,0,height+1.9,0,.2,.22,d+1.05,standard(0x4a302a),false);
+      roofPanelB.rotation.z=-0.52;
+      addBox(group,0,height+2.5,0,.22,.24,d+1.15,standard(0x4a302a),false);
       addBox(group,0,height+.25,0,w+.25,.18,d+.25,trim,false);
       // Porch posts and a warm front awning.
       addBox(group,-w*.34,1.75,front+.48,.14,3.0,.14,trim,false);
