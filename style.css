@@ -103,3 +103,14 @@
 .modal-card{background:linear-gradient(145deg,#1b3542,#10232e);border-color:#c3e5e833;box-shadow:0 28px 90px #000b}
 #boot-screen{background:radial-gradient(ellipse at 50% 40%,#294c55 0%,#142b37 46%,#09151e 100%)}
 @media(max-width:760px){.side-panel{backdrop-filter:blur(15px)}}
+
+
+/* Mayor objectives: visible, rewarding progression loop */
+.mission-card{margin:2px 0 14px;padding:12px;border-radius:12px;background:linear-gradient(145deg,rgba(39,103,82,.34),rgba(19,48,48,.42));border:1px solid rgba(119,226,177,.24);box-shadow:inset 0 1px rgba(255,255,255,.06)}
+.mission-kicker{display:flex;justify-content:space-between;gap:8px;color:#9ce8c1;font-size:8px;font-weight:900;letter-spacing:1.2px}
+.mission-title{margin-top:9px;color:#f5fbf7;font-size:12px;font-weight:900;line-height:1.3}
+.mission-detail{margin-top:4px;color:#b2c8c4;font-size:9px;line-height:1.45}
+.mission-track{height:6px;margin-top:11px;border-radius:20px;background:#ffffff18;overflow:hidden}
+.mission-fill{width:0;height:100%;border-radius:20px;background:linear-gradient(90deg,#5bcf99,#b0efad);transition:width .25s}
+.mission-foot{display:flex;justify-content:space-between;gap:5px;margin-top:7px;color:#b4c9c4;font-size:8px;font-weight:800}
+.mission-foot b{color:#a7edc4;font-size:8px}
