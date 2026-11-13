@@ -156,8 +156,21 @@ export class Game {
   checkMissionProgress() {
     const completed = this.missions.update(this.economy, this.placement);
     if (completed) {
-      this.hud.toast.show('MISSION COMPLETE: ' + completed.title + '  +
+      const reward = completed.reward.toLocaleString('en-US');
+      this.hud.toast.show('MISSION COMPLETE: ' + completed.title + '  +$' + reward);
+      this.saveGame(true);
+    }
+    this.updateMissionHUD();
+  }
 
+  updateMissionHUD() {
+    this.hud.updateMission(this.missions.progress(this.economy, this.placement));
+  }
+
+  refreshHUD() {
+    this.hud.update(this.economy, this.placement.objects.length);
+    this.updateMissionHUD();
+  }
   saveGame(silent = false) {
     const ok = this.saveSystem.save({
       economy: this.economy.toJSON(),
