@@ -120,6 +120,7 @@ export class Game {
   upgradeCity() {
     if (!this.economy.upgrade()) return;
     this.hud.toast.show('City level ' + this.economy.level + ' unlocked. New developments available!');
+    this.checkMissionProgress();
     this.refreshHUD();
     this.saveGame(true);
   }
