@@ -38,7 +38,21 @@ function showFailure(title, detail) {
 
 async function startGame() {
   try {
-    stage = 'Downloading the 3D engine';
+    // Load modules one at a time so a syntax/import failure identifies its real file.
+    const moduleChecks = [
+      '../vendor/three.js', '../config.js', '../core/AssetLoader.js', '../world/Lighting.js',
+      '../world/Roads.js', '../world/CityBlock.js', '../world/StreetProps.js', '../world/CityWorld.js',
+      '../player/CharacterAnimator.js', '../player/Player.js', '../player/CameraRig.js', './Input.js',
+      '../city/BuildingCatalog.js', '../city/PlacementSystem.js', '../systems/Economy.js',
+      '../systems/MissionSystem.js', '../systems/SaveSystem.js', '../vehicles/Vehicle.js',
+      '../systems/TrafficSystem.js', '../systems/PedestrianSystem.js', '../vehicles/VehicleController.js',
+      '../ui/BuildMenu.js', '../ui/Notifications.js', '../ui/HUD.js'
+    ];
+    for (const path of moduleChecks) {
+      stage = 'Checking module ' + path;
+      await import(path);
+    }
+    stage = 'Loading game controller';
     const { Game } = await import('./core/Game.js');
     stage = 'Creating the renderer and city';
     const game = new Game(world, ui);
