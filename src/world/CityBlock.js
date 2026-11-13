@@ -18,7 +18,7 @@ export class CityBlock {
       roughness: 0.24,
       metalness: 0.32
     });
-    const windowGeometry = new THREE.BoxGeometry(1.05, 0.95, 0.055);
+    const windowGeometry = new THREE.BoxGeometry(1.18, 1.22, 0.075);
     const windowInstances = new THREE.InstancedMesh(windowGeometry, windowMaterial, 14000);
     windowInstances.instanceMatrix.setUsage(THREE.StaticDrawUsage);
     const dummy = new THREE.Object3D();
@@ -33,6 +33,10 @@ export class CityBlock {
       this.parent.add(group);
       addBox(group, 0, height / 2, 0, width, height, depth, color);
       addBox(group, 0, height + 0.12, 0, width + 0.35, 0.24, depth + 0.35, facade(0x48565c), false);
+      if (height > 34) {
+        addBox(group, 0, height + 1.05, 0, width * 0.72, 1.65, depth * 0.72, facade(0x687a80), true);
+        addBox(group, 0, height + 1.92, 0, width * 0.76, 0.12, depth * 0.76, facade(0x394b53), false);
+      }
       addBox(group, 0, 0.7, depth / 2 + 0.04, width * 0.92, 1.2, 0.12, facade(0x35454d), false);
 
       const floors = Math.max(2, Math.floor(height / 3.1));
