@@ -58,7 +58,8 @@ export class Game {
       onSelect: id => this.placement.select(id),
       onUpgrade: () => this.upgradeCity(),
       onSave: () => this.saveGame(),
-      onReset: () => this.resetEverything()
+      onReset: () => this.resetEverything(),
+      onToggleBuild: () => this.input.toggleBuildPanel()
     });
     this.vehicles = new VehicleController(this.scene, this.player, message => this.hud.toast.show(message));
 
@@ -137,6 +138,10 @@ export class Game {
     this.input.keys.clear();
     this.input.pressed.clear();
     this.input.dragging = false;
+    this.input.firstPerson = false;
+    this.input.buildPanelOpen = false;
+    if (document.pointerLockElement) document.exitPointerLock?.();
+    document.getElementById('build-panel')?.classList.add('panel-hidden');
     this.input.yaw = 0;
     this.input.pitch = 0.28;
     this.input.zoom = 12.5;
