@@ -21,7 +21,7 @@ export class PlacementSystem {
     for(const tile of this.tiles){const occupied=this.occupied.has(tile.userData.key);tile.material.opacity = active && !occupied ? 0.19 : 0;tile.material.color.set(occupied?0x888888:0x73e8a6);}
   }
   handleClick(event){
-    if(event.button!==0)return;
+    if(event.button!==0 || document.pointerLockElement)return;
     const rect=this.renderer.domElement.getBoundingClientRect();
     this.pointer.x=((event.clientX-rect.left)/rect.width)*2-1;this.pointer.y=-((event.clientY-rect.top)/rect.height)*2+1;
     this.raycaster.setFromCamera(this.pointer,this.camera);
