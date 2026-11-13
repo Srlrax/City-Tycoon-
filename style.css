@@ -124,3 +124,8 @@
 body.pointer-locked,body.pointer-locked *{cursor:none!important}
 #world canvas{cursor:crosshair}
 @media(max-width:760px){.panel-toggle{padding:8px 9px;font-size:8px;gap:5px}.panel-toggle kbd{font-size:8px}}
+
+
+/* Minimal center reticle while the first-person mouse is captured. */
+.first-person-reticle{display:none;position:absolute;left:50%;top:50%;width:8px;height:8px;transform:translate(-50%,-50%);border:1px solid rgba(245,255,250,.92);border-radius:50%;box-shadow:0 0 0 2px rgba(8,20,25,.38);pointer-events:none;z-index:4}
+body.pointer-locked .first-person-reticle{display:block}
