@@ -19,18 +19,18 @@ export class Game {
     this.worldElement = worldElement;
     this.uiElement = uiElement;
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(62, innerWidth / innerHeight, 0.1, 520);
+    this.camera = new THREE.PerspectiveCamera(58, innerWidth / innerHeight, 0.1, 600);
 
     const lowPower = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
       (navigator.deviceMemory && navigator.deviceMemory <= 4);
     this.renderer = new THREE.WebGLRenderer({ antialias: !lowPower, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, lowPower ? 1.15 : 1.6));
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, lowPower ? 1.25 : 1.75));
     this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.08;
+    this.renderer.toneMappingExposure = 1.12;\n    this.renderer.physicallyCorrectLights = true;
     worldElement.appendChild(this.renderer.domElement);
 
     const lighting = createLighting(this.scene);
