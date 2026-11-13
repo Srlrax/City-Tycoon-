@@ -13,11 +13,27 @@ export class StreetProps{
    for(const side of [-1,1]){
     const x=along,z=road+side*9.15;
     box(this.parent,x,.12,z,2.05,.2,2.05,planter,false);
-    cylinder(this.parent,x,1.18,z,.2,.31,2.15,bark,10);
-    // Three overlapping canopy clusters make the tree less like a single polygon ball.
-    for(const [ox,oy,oz,s,k] of [[0,2.75,0,1.12,0],[.62,2.92,.08,.78,1],[-.5,2.85,-.22,.72,2],[.08,3.35,-.1,.66,3]]){
-      const crown=new THREE.Mesh(new THREE.IcosahedronGeometry(s,2),leaf[(Math.abs(along/22)+k)%leaf.length]);
-      crown.position.set(x+ox,oy,z+oz);crown.scale.set(1,1.06,.96);crown.castShadow=true;crown.receiveShadow=true;this.parent.add(crown);
+    cylinder(this.parent,x,1.28,z,.18,.3,2.45,bark,10);
+    // A tapered trunk, visible scaffold branches and a broad, layered leafy crown.
+    for(const [dx,dz,lean] of [[-.55,.12,-.48],[.48,-.2,.42],[.12,.52,.18],[-.18,-.5,-.22]]){
+      const branch=cylinder(this.parent,x+dx*.48,2.05,z+dz*.48,.075,.13,1.18,bark,7);
+      branch.rotation.z=lean;branch.rotation.x=dz*.45;
+    }
+    const crownParts=[
+      [0,3.12,0,1.25,0],[.78,3.22,.12,.88,1],[-.72,3.18,-.18,.9,2],
+      [.12,3.68,-.48,.82,3],[-.28,3.48,.58,.78,1],[.52,3.72,.48,.68,2],
+      [-.62,3.62,.38,.7,0],[.08,4.02,.02,.62,3]
+    ];
+    for(const [ox,oy,oz,s,k] of crownParts){
+      const crown=new THREE.Mesh(new THREE.SphereGeometry(s,12,10),leaf[(Math.abs(along/22)+k)%leaf.length]);
+      crown.position.set(x+ox,oy,z+oz);crown.scale.set(1.08,1,.96);crown.castShadow=true;crown.receiveShadow=true;this.parent.add(crown);
+    }
+    // Low groundcover and a dark mulch ring finish the base of each street tree.
+    const mulch=new THREE.Mesh(new THREE.CylinderGeometry(1.03,1.03,.055,18),mat(0x4a4035,1));
+    mulch.position.set(x,.245,z);mulch.receiveShadow=true;this.parent.add(mulch);
+    for(let q=0;q<5;q++){
+      const tuft=new THREE.Mesh(new THREE.SphereGeometry(.23,8,6),leaf[(q+1)%leaf.length]);
+      const a=q*Math.PI*2/5;tuft.position.set(x+Math.cos(a)*.78,.39,z+Math.sin(a)*.78);tuft.scale.set(1,.58,1);this.parent.add(tuft);
     }
    }
   }
@@ -125,6 +141,71 @@ export class StreetProps{
      flower.position.set(shrub.position.x,.93,shrub.position.z);island.add(flower);
     }
    }
+  }
+
+  // Signature park-like planting pockets: curved stone paths, layered perennial beds,
+  // ornamental grasses and flowering shrubs create deliberate landscape composition.
+  const pathMat=mat(0xb6b1a1,.98), pathEdge=mat(0x777d72,.96);
+  const perennial=[mat(0x385f3d),mat(0x477c49),mat(0x638b50),mat(0x8c9b59)];
+  const bloom=[mat(0xf1d28b),mat(0xd58b91),mat(0xd6c6e8),mat(0xf0eee0),mat(0xe6a65f)];
+  const parkCenters=[[-94,-94],[-94,94],[94,-94],[94,94]];
+  for(let p=0;p<parkCenters.length;p++){
+    const [cx,cz]=parkCenters[p], park=new THREE.Group();park.position.set(cx,0,cz);this.parent.add(park);
+    // A gently bending pale gravel walk, edged with small stone pavers.
+    const pts=[new THREE.Vector3(-4.2,.075,-2.6),new THREE.Vector3(-2.2,.075,-1.4),new THREE.Vector3(-.4,.075,-1.7),new THREE.Vector3(1.5,.075,-.55),new THREE.Vector3(4.1,.075,.9)];
+    const curve=new THREE.CatmullRomCurve3(pts);
+    const walk=new THREE.Mesh(new THREE.TubeGeometry(curve,28,.48,7,false),pathMat);walk.receiveShadow=true;park.add(walk);
+    for(let n=0;n<13;n++){
+      const t=n/12, point=curve.getPoint(t);
+      for(const side of [-1,1]){
+        const pebble=new THREE.Mesh(new THREE.BoxGeometry(.48,.12,.24),pathEdge);
+        pebble.position.set(point.x+side*.55,.08,point.z);pebble.rotation.y=-.35;park.add(pebble);
+      }
+    }
+    // Curved beds with mixed-height shrubs and flower drifts.
+    for(let bed=0;bed<2;bed++){
+      const bx=bed===0?-2.3:2.6, bz=bed===0?2.45:-2.3;
+      for(let n=0;n<9;n++){
+        const px=bx+(n-4)*.58, pz=bz+Math.sin(n*.55+bed)*.36;
+        const bush=new THREE.Mesh(new THREE.SphereGeometry(.38+(n%3)*.08,10,8),perennial[(n+p+bed)%perennial.length]);
+        bush.position.set(px,.42,pz);bush.scale.y=.82;bush.castShadow=true;park.add(bush);
+        if(n%2===0){
+          const stem=cylinder(park,px,.73,pz,.018,.025,.48,perennial[2],5);
+          const head=new THREE.Mesh(new THREE.SphereGeometry(.13,8,6),bloom[(n+p)%bloom.length]);
+          head.position.set(px,.99,pz);head.scale.set(1,1.25,1);park.add(head);
+        }
+      }
+    }
+    // Upright ornamental grass fans add height and movement to the planting.
+    for(let n=0;n<8;n++){
+      const gx=(n%4)*1.8-2.7, gz=(n<4?-3.8:3.7);
+      for(let blade=0;blade<5;blade++){
+        const grassBlade=new THREE.Mesh(new THREE.ConeGeometry(.09,.92,5),perennial[(blade+n)%perennial.length]);
+        const a=blade*Math.PI*2/5;grassBlade.position.set(gx+Math.cos(a)*.18,.49,gz+Math.sin(a)*.18);
+        grassBlade.rotation.z=Math.cos(a)*.24;grassBlade.rotation.x=Math.sin(a)*.24;park.add(grassBlade);
+      }
+    }
+    // A low timber seat gives each pocket a clear human-scale focal point.
+    box(park,0,.47,4.1,2.1,.14,.48,wood);
+    for(const sx of [-.78,.78])box(park,sx,.24,4.1,.12,.48,.38,steel);
+    for(let n=0;n<6;n++){
+      const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.22+(n%2)*.08,0),stoneMats[n%2]);
+      rock.position.set(-3.7+n*1.45,.2,4.65+(n%2)*.28);rock.scale.set(1.4,.7,1);park.add(rock);
+    }
+  }
+  // Flowering groundcover ribbons run along the outer greenbelt in natural clusters.
+  for(let side of [-1,1]){
+    for(let n=0;n<34;n++){
+      const x=-126+n*7.6,z=side*133;
+      for(let k=0;k<3;k++){
+        const plant=new THREE.Mesh(new THREE.SphereGeometry(.2+(k%2)*.06,8,6),perennial[(n+k)%perennial.length]);
+        plant.position.set(x+(k-1)*.48,.25,z+(k%2?-.55:.55));plant.scale.y=.7;this.parent.add(plant);
+      }
+      if(n%2===0){
+        const flower=new THREE.Mesh(new THREE.SphereGeometry(.12,7,6),bloom[n%bloom.length]);
+        flower.position.set(x,.46,z);this.parent.add(flower);
+      }
+    }
   }
 
  }
