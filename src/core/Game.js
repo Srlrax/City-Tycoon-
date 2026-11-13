@@ -8,6 +8,7 @@ import { Input } from './Input.js';
 import { PlacementSystem } from '../city/PlacementSystem.js';
 import { BUILDINGS } from '../city/BuildingCatalog.js';
 import { Economy } from '../systems/Economy.js';
+import { MissionSystem } from '../systems/MissionSystem.js';
 import { SaveSystem } from '../systems/SaveSystem.js';
 import { TrafficSystem } from '../systems/TrafficSystem.js';
 import { PedestrianSystem } from '../systems/PedestrianSystem.js';
@@ -42,6 +43,7 @@ export class Game {
     this.input = new Input(this.renderer.domElement);
     this.cameraRig = new CameraRig(this.camera, this.input);
     this.economy = new Economy();
+    this.missions = new MissionSystem();
     this.saveSystem = new SaveSystem();
     this.traffic = new TrafficSystem(this.scene, lowPower ? 8 : 12);
     this.pedestrians = new PedestrianSystem(this.scene);
@@ -62,6 +64,7 @@ export class Game {
 
     this.restoreGame();
     this.hud.update(this.economy, this.placement.objects.length);
+    this.updateMissionHUD();
     this.clock = new THREE.Clock();
     this.incomeElapsed = 0;
     this.autosaveElapsed = 0;
@@ -109,6 +112,7 @@ export class Game {
     }
     this.economy.registerBuilding(typeId);
     this.hud.toast.show(spec.name + ' added to your city!');
+    this.checkMissionProgress();
     this.refreshHUD();
     this.saveGame(true);
   }
@@ -124,6 +128,7 @@ export class Game {
     // Clear placed properties and restore all progression to a brand-new city.
     this.placement.clear();
     this.economy.reset();
+    this.missions.reset();
     this.player.reset();
     this.vehicles.reset();
 
@@ -148,13 +153,15 @@ export class Game {
     this.hud.toast.show('Your city has been completely reset.');
   }
 
-  refreshHUD() {
-    this.hud.update(this.economy, this.placement.objects.length);
-  }
+  checkMissionProgress() {
+    const completed = this.missions.update(this.economy, this.placement);
+    if (completed) {
+      this.hud.toast.show('MISSION COMPLETE: ' + completed.title + '  +
 
   saveGame(silent = false) {
     const ok = this.saveSystem.save({
       economy: this.economy.toJSON(),
+      missions: this.missions.toJSON(),
       buildings: this.placement.getSaveData(),
       player: { x: this.player.group.position.x, z: this.player.group.position.z },
       vehicle: this.vehicles.getSaveData()
@@ -167,6 +174,7 @@ export class Game {
     const data = this.saveSystem.load();
     if (!data) return;
     if (data.economy) this.economy.load(data.economy);
+    if (data.missions) this.missions.load(data.missions.completed);
     for (const item of (data.buildings || [])) {
       const spec = BUILDINGS.find(building => building.id === item.type);
       if (spec && this.placement.place(item.type, item.gx, item.gz)) this.economy.registerBuilding(item.type);
@@ -202,6 +210,95 @@ export class Game {
       const ticks = Math.floor(this.incomeElapsed / CITY_CONFIG.incomeTickMs);
       this.incomeElapsed -= ticks * CITY_CONFIG.incomeTickMs;
       for (let i = 0; i < ticks; i++) this.economy.tick();
+      this.checkMissionProgress();
+      this.refreshHUD();
+    }
+    if (this.autosaveElapsed >= 30000) {
+      this.autosaveElapsed = 0;
+      this.saveGame(true);
+    }
+
+    this.cameraRig.update(this.vehicles.focus, dt, this.vehicles.driving);
+    this.renderer.render(this.scene, this.camera);
+  }
+
+  dispose() {
+    this.running = false;
+    this.renderer.setAnimationLoop(null);
+    this.input.dispose();
+    this.placement.dispose();
+    window.removeEventListener('resize', this.onResize);
+    this.renderer.dispose();
+  }
+}
+ + completed.reward.toLocaleString('en-US'));
+      this.saveGame(true);
+    }
+    this.updateMissionHUD();
+  }
+
+  updateMissionHUD() {
+    this.hud.updateMission(this.missions.progress(this.economy, this.placement));
+  }
+
+  refreshHUD() {
+    this.hud.update(this.economy, this.placement.objects.length);
+    this.updateMissionHUD();
+  }
+
+  saveGame(silent = false) {
+    const ok = this.saveSystem.save({
+      economy: this.economy.toJSON(),
+      missions: this.missions.toJSON(),
+      buildings: this.placement.getSaveData(),
+      player: { x: this.player.group.position.x, z: this.player.group.position.z },
+      vehicle: this.vehicles.getSaveData()
+    });
+    if (!silent) this.hud.toast.show(ok ? 'City saved on this device.' : 'Save failed. Check browser storage settings.');
+    return ok;
+  }
+
+  restoreGame() {
+    const data = this.saveSystem.load();
+    if (!data) return;
+    if (data.economy) this.economy.load(data.economy);
+    if (data.missions) this.missions.load(data.missions.completed);
+    for (const item of (data.buildings || [])) {
+      const spec = BUILDINGS.find(building => building.id === item.type);
+      if (spec && this.placement.place(item.type, item.gx, item.gz)) this.economy.registerBuilding(item.type);
+    }
+    if (data.player) {
+      this.player.group.position.x = Number(data.player.x) || 0;
+      this.player.group.position.z = Number(data.player.z) || 13;
+    }
+    this.vehicles.load(data.vehicle);
+  }
+
+  resize() {
+    const width = this.worldElement.clientWidth || innerWidth;
+    const height = this.worldElement.clientHeight || innerHeight;
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(width, height);
+  }
+
+  animate() {
+    if (!this.running) return;
+    const dt = Math.min(this.clock.getDelta(), 0.045);
+
+    if (this.input.consumePress('e')) this.vehicles.toggleVehicle();
+    if (!this.vehicles.driving) this.player.update(dt, this.input, CITY_CONFIG.playerSpeed);
+    this.vehicles.update(dt, this.input);
+    this.traffic.update(dt);
+    this.pedestrians.update(dt);
+
+    this.incomeElapsed += dt * 1000;
+    this.autosaveElapsed += dt * 1000;
+    if (this.incomeElapsed >= CITY_CONFIG.incomeTickMs) {
+      const ticks = Math.floor(this.incomeElapsed / CITY_CONFIG.incomeTickMs);
+      this.incomeElapsed -= ticks * CITY_CONFIG.incomeTickMs;
+      for (let i = 0; i < ticks; i++) this.economy.tick();
+      this.checkMissionProgress();
       this.refreshHUD();
     }
     if (this.autosaveElapsed >= 30000) {
