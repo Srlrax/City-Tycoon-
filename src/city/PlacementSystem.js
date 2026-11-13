@@ -130,13 +130,26 @@ export class PlacementSystem {
     }
 
     if(isHouse){
-      // Twin sloped roof planes create a recognizable gable instead of a pyramid cap.
-      const roofPanelA=addBox(group,-w*.245,height+1.18,0,w*.58,.2,d+1.0,roof);
-      roofPanelA.rotation.z=0.52;
-      const roofPanelB=addBox(group,w*.245,height+1.18,0,w*.58,.2,d+1.0,roof);
-      roofPanelB.rotation.z=-0.52;
-      addBox(group,0,height+2.5,0,.22,.24,d+1.15,standard(0x4a302a),false);
+      // Two correctly oriented roof planes meet at a raised ridge. Their outer
+      // edges land at the wall top instead of dipping below the eaves.
+      const roofRise = 2.5;
+      const roofRun = w / 2;
+      const roofLength = Math.hypot(roofRun, roofRise);
+      const roofAngle = Math.atan2(roofRise, roofRun);
+      const roofCenterY = height + .42 + roofRise / 2;
+      const roofPanelA = addBox(group, -w*.25, roofCenterY, 0, roofLength, .24, d+1.05, roof);
+      roofPanelA.rotation.z = roofAngle;
+      const roofPanelB = addBox(group, w*.25, roofCenterY, 0, roofLength, .24, d+1.05, roof);
+      roofPanelB.rotation.z = -roofAngle;
+      addBox(group,0,height+.42+roofRise,0,.3,.28,d+1.18,standard(0x49302b),false);
+      // Dark fascia makes the roof edge read clearly against the walls.
+      for (const side of [-1,1]) {
+        const fascia = addBox(group, side*w*.49, height+.52, 0, .18,.28,d+1.18,standard(0x49302b),false);
+      }
       addBox(group,0,height+.25,0,w+.25,.18,d+.25,trim,false);
+      // Chimney and cap sit behind the ridge.
+      addBox(group,w*.29,height+1.55,-d*.18,.72,2.0,.78,standard(0x8b5947),true);
+      addBox(group,w*.29,height+2.58,-d*.18,.92,.16,.96,standard(0x493b36),false);
       // Porch posts and a warm front awning.
       addBox(group,-w*.34,1.75,front+.48,.14,3.0,.14,trim,false);
       addBox(group,w*.34,1.75,front+.48,.14,3.0,.14,trim,false);
@@ -160,13 +173,53 @@ export class PlacementSystem {
       }
     }
 
-    // Low clipped hedges and a short paved approach make the property sit in the lot.
+    // Finish each lot as a cared-for property rather than a building floating
+    // on a square pad: paving, planted borders, shrubs, and a small street tree.
     const hedgeMat=standard(0x39734b,.95);
+    const pathMat=standard(0xbab8ad,.98);
+    const soilMat=standard(0x51483d,1);
+    const flowerMats=[standard(0xe7c77b),standard(0xd98f86),standard(0xe8e2c5)];
     for(const side of [-1,1]){
       const hedge=new THREE.Mesh(new THREE.BoxGeometry(2.6,.55,.55),hedgeMat);
       hedge.position.set(side*(w/2+1.15),.55,-d*.25);hedge.castShadow=true;group.add(hedge);
+      // Raised flower border alongside the entry approach.
+      const bedX=side*(w/2+1.15), bedZ=front+1.5;
+      addBox(group,bedX,.2,bedZ,1.55,.28,2.8,trim,false);
+      addBox(group,bedX,.36,bedZ,1.32,.08,2.55,soilMat,false);
+      for(let n=0;n<4;n++){
+        const shrub=new THREE.Mesh(new THREE.SphereGeometry(.28+(n%2)*.05,9,7),hedgeMat);
+        shrub.position.set(bedX-.42+n*.28,.67,bedZ-.75+(n%2)*.38);
+        shrub.scale.y=.78;shrub.castShadow=true;group.add(shrub);
+        if(n%2===0){
+          const bloom=new THREE.Mesh(new THREE.SphereGeometry(.105,7,6),flowerMats[(n+(side>0?1:0))%flowerMats.length]);
+          bloom.position.set(shrub.position.x,.88,shrub.position.z);group.add(bloom);
+        }
+      }
     }
-    addBox(group,0,.27,front+1.55,2.4,.12,2.1,standard(0xb9b6aa,.95),false);
+    // A straight front walk links the porch to the sidewalk-facing lot edge.
+    addBox(group,0,.265,front+1.55,2.4,.12,2.1,pathMat,false);
+    addBox(group,0,.255,front+3.35,1.35,.1,2.25,pathMat,false);
+    // Small stepping-stone joints add scale and detail to the approach.
+    for(let n=0;n<4;n++) addBox(group,0,.315,front+2.45+n*.48,1.42,.025,.035,standard(0x8e918b),false);
+    if(isHouse){
+      // Compact front lawn and a low picket fence frame the home without
+      // blocking the driveway or the path to the front door.
+      addBox(group,0,.205,-d*.5-1.55,w*.76,.12,2.0,standard(0x638b59),false);
+      const fence=standard(0xe5dfcf,.86);
+      for(let x=-7.2;x<=7.21;x+=1.2){
+        addBox(group,x,.72,-7.78,.09,1.0,.09,fence,false);
+        const picket=addBox(group,x,.98,-7.78,.16,.22,.12,fence,false);
+        picket.rotation.z=0;
+      }
+      addBox(group,0,.47,-7.78,14.6,.1,.1,fence,false);
+      addBox(group,0,.88,-7.78,14.6,.1,.1,fence,false);
+      // A leafy ornamental tree and mailbox complete the front garden.
+      addBox(group,-6.55,.82,-4.9,.18,1.6,.18,standard(0x76543a),false);
+      const crown=new THREE.Mesh(new THREE.IcosahedronGeometry(.92,1),standard(0x397b49));
+      crown.position.set(-6.55,2.05,-4.9);crown.castShadow=true;group.add(crown);
+      addBox(group,6.7,.62,front+2.1,.16,1.0,.16,standard(0x34444b),false);
+      addBox(group,6.7,1.12,front+2.1,.62,.38,.52,standard(0x9a6548),false);
+    }
     return group;
   }
   clear() {
