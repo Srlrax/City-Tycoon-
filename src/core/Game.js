@@ -30,7 +30,7 @@ export class Game {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.12;\n    this.renderer.physicallyCorrectLights = true;
+    this.renderer.toneMappingExposure = 1.12;
     worldElement.appendChild(this.renderer.domElement);
 
     const lighting = createLighting(this.scene);
