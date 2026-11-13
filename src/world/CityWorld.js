@@ -28,10 +28,10 @@ export class CityWorld {
   }
 
   build() {
-    const grass = new THREE.MeshStandardMaterial({ color: 0xffffff, map: createNoiseTexture('#66875b', 22, 28, 28), roughness: 1 });
-    const soil = material(0x786f5b, 1);
+    const grass = new THREE.MeshStandardMaterial({ color: 0xffffff, map: createNoiseTexture('#6f8b61', 34, 34, 42), roughness: 1 });
+    const soil = material(0x655d50, 1);
     addBox(this.root, 0, -0.48, 0, 360, 0.8, 360, soil, false, true);
-    addBox(this.root, 0, -0.045, 0, 280, 0.08, 280, grass, false, true);
+    addBox(this.root, 0, -0.045, 0, 280, 0.08, 280, grass, false, true);\n    // Broad, low-contrast greenbelt beyond the playable blocks softens the city edge.\n    const verge = material(0x78916a, 1);\n    addBox(this.root, 0, -0.012, -137, 280, 0.035, 6, verge, false, true);\n    addBox(this.root, 0, -0.012, 137, 280, 0.035, 6, verge, false, true);
 
     new Roads(this.root).build();
     this.createPlots();
