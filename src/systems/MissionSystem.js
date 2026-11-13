@@ -3,8 +3,8 @@ const MISSIONS = [
   { title: 'Open for business', detail: 'Build your first corner store', kind: 'buildings', type: 'shop', target: 1, reward: 250 },
   { title: 'Welcome new residents', detail: 'Grow your population to 25', kind: 'population', target: 25, reward: 400 },
   { title: 'A thriving economy', detail: 'Reach $40 income per second', kind: 'income', target: 40, reward: 600 },
-  { title: 'Give people room to breathe', detail: 'Build your first city park', kind: 'buildings', type: 'park', target: 1, reward: 850 },
-  { title: 'Become an established city', detail: 'Reach city level 2', kind: 'level', target: 2, reward: 1200 }
+  { title: 'Become an established city', detail: 'Reach city level 2', kind: 'level', target: 2, reward: 1200 },
+  { title: 'Give people room to breathe', detail: 'Build your first city park', kind: 'buildings', type: 'park', target: 1, reward: 850 }
 ];
 
 export class MissionSystem {
