@@ -35,6 +35,7 @@ export class HUD {
       </aside>
       <button class="danger-button ui-button reset-fab" id="reset-city-button">↻ RESET EVERYTHING</button>
       <div class="controls-hint"><span class="keycap">W A S D</span> MOVE <span class="keycap">V</span> FIRST PERSON <span class="keycap">MOUSE</span> LOOK <span class="keycap">B</span> BUILD PANEL <span class="keycap">E</span> CAR</div>
+      <div class="first-person-reticle" aria-hidden="true"></div>
       <div id="toast" class="toast" role="status"></div>
       <div id="help-modal" class="modal hidden"><div class="modal-card">
         <button class="modal-close ui-button" id="close-help" aria-label="Close">×</button>
