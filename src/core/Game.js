@@ -222,6 +222,7 @@ export class Game {
     this.vehicles.update(dt, this.input);
     this.traffic.update(dt);
     this.pedestrians.update(dt);
+    this.player.group.visible = !(this.input.firstPerson && !this.vehicles.driving);
 
     this.incomeElapsed += dt * 1000;
     this.autosaveElapsed += dt * 1000;
