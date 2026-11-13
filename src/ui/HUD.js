@@ -11,9 +11,9 @@ export class HUD {
         <div class="stat-card"><div class="stat-label">CASH</div><div class="stat-value cash" id="hud-cash">$1,250</div></div>
         <div class="stat-card"><div class="stat-label">INCOME</div><div class="stat-value" id="hud-income">$0/s</div></div>
         <div class="stat-card"><div class="stat-label">RESIDENTS</div><div class="stat-value" id="hud-population">0</div></div>
-        <button class="help-button ui-button" id="help-button" aria-label="How to play">?</button>
+        <button class="panel-toggle ui-button" id="build-toggle" aria-label="Toggle build panel">BUILD <kbd>B</kbd></button><button class="help-button ui-button" id="help-button" aria-label="How to play">?</button>
       </header>
-      <aside class="side-panel ui-panel" id="build-panel">
+      <aside class="side-panel ui-panel panel-hidden" id="build-panel">
         <div class="panel-head"><div class="panel-icon">🏗️</div><div><div class="panel-title">BUILD MENU</div><div class="panel-caption">Select a property, then click a green lot</div></div></div>
         <div id="building-list"></div><div class="panel-note">Properties generate income every second. Explore the city and expand your district.</div>
       </aside>
@@ -34,12 +34,12 @@ export class HUD {
         <button class="secondary-button ui-button" id="save-button">SAVE CITY</button>
       </aside>
       <button class="danger-button ui-button reset-fab" id="reset-city-button">↻ RESET EVERYTHING</button>
-      <div class="controls-hint"><span class="keycap">W A S D</span> MOVE <span class="keycap">RIGHT DRAG</span> LOOK <span class="keycap">SCROLL</span> ZOOM <span class="keycap">E</span> DRIVE CAR <span class="keycap">CLICK</span> BUILD</div>
+      <div class="controls-hint"><span class="keycap">W A S D</span> MOVE <span class="keycap">V</span> FIRST PERSON <span class="keycap">MOUSE</span> LOOK <span class="keycap">B</span> BUILD PANEL <span class="keycap">E</span> CAR</div>
       <div id="toast" class="toast" role="status"></div>
       <div id="help-modal" class="modal hidden"><div class="modal-card">
         <button class="modal-close ui-button" id="close-help" aria-label="Close">×</button>
         <h2>Welcome, Mayor.</h2><p>Your city starts small. Build homes and businesses, collect income, and upgrade your city to unlock bigger developments.</p>
-        <ul><li><b>WASD / arrow keys:</b> move your character. Hold Shift to run and press Space to jump.</li><li><b>Right mouse drag:</b> look around. Use the mouse wheel to zoom in and out.</li><li><b>E:</b> enter or exit your blue sports car when you are nearby.</li><li><b>While driving:</b> WASD steers and accelerates or reverses.</li><li><b>Build menu:</b> select a property, then click an empty green lot.</li><li><b>Upgrade city:</b> unlocks offices, parks, and the glass tower.</li><li><b>Save city:</b> stores your progress in this browser.</li></ul>
+        <ul><li><b>WASD / arrow keys:</b> move your character. Hold Shift to run and press Space to jump.</li><li><b>V:</b> switch between first-person and third-person camera. In first-person, click the world to capture your mouse and move the camera freely.</li><li><b>B:</b> open or close the build panel. The cursor is available while the panel is open. Press Escape to release the mouse.</li><li><b>Third-person:</b> right-click and drag to look around; use the mouse wheel to zoom.</li><li><b>E:</b> enter or exit your blue sports car when you are nearby.</li><li><b>While driving:</b> WASD steers and accelerates or reverses.</li><li><b>Build menu:</b> select a property, then click an empty green lot.</li><li><b>Upgrade city:</b> unlocks offices, parks, and the glass tower.</li><li><b>Save city:</b> stores your progress in this browser.</li></ul>
         <button class="primary-button ui-button" id="got-it">LET'S BUILD</button>
       </div></div>
       <div id="reset-confirm-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="reset-confirm-title">
@@ -60,6 +60,7 @@ export class HUD {
       this.handlers.onSelect(item.id);
       this.toast.show('Selected ' + item.name + '. Click an empty green lot.');
     });
+    this.root.querySelector('#build-toggle').addEventListener('click', () => this.handlers.onToggleBuild());
     this.root.querySelector('#help-button').addEventListener('click', () => this.openHelp());
     this.root.querySelector('#close-help').addEventListener('click', () => this.closeHelp());
     this.root.querySelector('#got-it').addEventListener('click', () => this.closeHelp());
