@@ -19,6 +19,13 @@ export class HUD {
       </aside>
       <aside class="side-panel ui-panel" id="city-panel">
         <div class="panel-head"><div class="panel-icon">📊</div><div><div class="panel-title">CITY OVERVIEW</div><div class="panel-caption">Your mayor dashboard</div></div></div>
+        <section class="mission-card" id="mission-card">
+          <div class="mission-kicker">MAYOR'S OBJECTIVE <span id="mission-count">1 / 6</span></div>
+          <div class="mission-title" id="mission-title">Build your neighborhood</div>
+          <div class="mission-detail" id="mission-detail">Place 2 starter homes</div>
+          <div class="mission-track"><div class="mission-fill" id="mission-fill"></div></div>
+          <div class="mission-foot"><span id="mission-progress">0 / 2</span><b id="mission-reward">REWARD $150</b></div>
+        </section>
         <div class="level-row"><span>City level</span><b id="hud-level">1</b></div>
         <div class="progress-track"><div class="progress-fill" id="hud-xp"></div></div>
         <div class="detail-row"><span>Properties</span><b id="hud-buildings">0</b></div>
@@ -68,6 +75,22 @@ export class HUD {
   }
   renderBuildings(level) {
     this.buildMenu.render(level, this.selected);
+  }
+
+  updateMission(state) {
+    const card = this.root.querySelector('#mission-card');
+    if (!state || !state.mission) {
+      card.innerHTML = '<div class="mission-kicker">CITY LEGEND</div><div class="mission-title">All objectives complete!</div><div class="mission-detail">Your city is ready for its next chapter.</div>';
+      return;
+    }
+    const m = state.mission;
+    const value = Math.floor(state.value);
+    card.querySelector('#mission-count').textContent = m.index + ' / ' + m.total;
+    card.querySelector('#mission-title').textContent = m.title;
+    card.querySelector('#mission-detail').textContent = m.detail;
+    card.querySelector('#mission-fill').style.width = (state.ratio * 100) + '%';
+    card.querySelector('#mission-progress').textContent = Math.min(value, m.target).toLocaleString('en-US') + ' / ' + m.target.toLocaleString('en-US');
+    card.querySelector('#mission-reward').textContent = 'REWARD ' + money(m.reward);
   }
 
   update(economy, buildingCount) {
